@@ -21,6 +21,9 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "src"
+    "src", 
+    "../react-auth/src/utils",
+    "../react-auth/src/services",
+    "../react-auth/src/Auth"
   ]
 }
