@@ -3,9 +3,11 @@
 @tailwind utilities;
 
 .signin-page {
-  background: url('../public/welcome.jpg');
+  background: url('../public/sign-in-bg.jpg') no-repeat center;
+  background-size: cover;
 }
 
 .signup-page {
-  background: url('../public/registration.jpg');
+  background: url('../public/sign-up-bg.jpg') no-repeat center;
+  background-size: cover;
 }

@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { API_ROUTES } from '../../utils/constants';
 import { Link } from 'react-router-dom';
-import { navigateToExternalSite, storeTokenInLocalStorage } from '../../utils/common';
+import { storeTokenInLocalStorage } from '../../utils/common';
+import { API_ROUTES } from '../../utils/constants';
 
 const RegistrationForm = () => {
   const [email, setEmail] = useState('');
@@ -15,8 +15,8 @@ const RegistrationForm = () => {
   const signUp = async () => {
     try {
       setIsLoading(true);
-      // const response = await fetch(API_ROUTES.SIGN_UP, {
-      const response = await fetch('http://localhost:5000/auth/registration', {
+
+      const response = await fetch(API_ROUTES.SIGN_UP, {
         method: 'POST',
         body: JSON.stringify({
           email,
@@ -28,15 +28,13 @@ const RegistrationForm = () => {
       const result = await response.json();
       
       if (result.error) {
-        setValidationErrors(result.error && result.error.statusMessage);
+        setValidationErrors(result.error && result.error.payload && result.error.payload.errors);
         return;
       }
 
       storeTokenInLocalStorage(result.payload.token);
       document.cookie = `jwt=${result.payload.token}; domain=.microfrontend.com; path=/;`;
-
-      // Redirect to the Angular app
-      window.location.href = 'http://main.microfrontend.com';
+      window.location.href = process.env.REACT_APP_MAIN_URL;
     }
     catch (err) {
       console.log('Some error occured during signing up: ', err);
@@ -53,39 +51,61 @@ const RegistrationForm = () => {
           Sign Up
         </h2>
         <div className="flex flex-1 flex-col justify-evenly">
-          <input
-            className="border-2 outline-none p-2 rounded-md"
-            type="email"
-            placeholder="First Name"
-            value={firstName}
-            onChange={(e) => { setFirstName(e.target.value); }}
-          />
-          <input
-            className="border-2 outline-none p-2 rounded-md"
-            type="email"
-            placeholder="Last Name"
-            value={lastName}
-            onChange={(e) => { setLastName(e.target.value); }}
-          />
-          <input
-            className="border-2 outline-none p-2 rounded-md"
-            type="email"
-            placeholder="Enter Your Email"
-            value={email}
-            onChange={(e) => { setEmail(e.target.value); }}
-          />
-          {
-            errors && errors.email ? <p>{errors.email.message}</p> : null
-          }
-          <input
-            className="border-2 outline-none p-2 rounded-md"
-            type="password"
-            placeholder="*******" value={password}
-            onChange={(e) => { setPassword(e.target.value); }}
-          />
-          {
-            errors && errors.password ? <p>{errors.password.message}</p> : null
-          }
+          <div className='relative'>
+            <input
+              className={`w-full border-2 outline-none p-2 rounded-md ${errors && errors.firstName ? 'border-red-500' : ''}`}
+              type="email"
+              placeholder="First Name"
+              value={firstName}
+              onChange={(e) => { setFirstName(e.target.value); }}
+            />
+            {errors && errors.firstName && (
+              <p className="absolute mt-2 text-red-500 text-sm">
+                {errors.firstName.message}
+              </p>
+            )}
+          </div>
+          <div className='relative'>
+            <input
+              className={`w-full border-2 outline-none p-2 rounded-md ${errors && errors.lastName ? 'border-red-500' : ''}`}
+              type="email"
+              placeholder="Last Name"
+              value={lastName}
+              onChange={(e) => { setLastName(e.target.value); }}
+            />
+            {errors && errors.lastName && (
+              <p className="absolute mt-2 text-red-500 text-sm">
+                {errors.lastName.message}
+              </p>
+            )}
+          </div>
+          <div className='relative'>
+            <input
+              className={`w-full border-2 outline-none p-2 rounded-md ${errors && errors.email ? 'border-red-500' : ''}`}
+              type="email"
+              placeholder="Enter Your Email"
+              value={email}
+              onChange={(e) => { setEmail(e.target.value); }}
+            />
+            {errors && errors.email && (
+              <p className="absolute mt-2 text-red-500 text-sm">
+                {errors.email.message}
+              </p>
+            )}
+          </div>
+          <div className='relative'>
+            <input
+              className={`w-full border-2 outline-none p-2 rounded-md ${errors && errors.password ? 'border-red-500' : ''}`}
+              type="password"
+              placeholder="*******" value={password}
+              onChange={(e) => { setPassword(e.target.value); }}
+            />
+            {errors && errors.password && (
+              <p className="absolute mt-2 text-red-500 text-sm">
+                {errors.password.message}
+              </p>
+            )}
+          </div>
 
           <button
             className="

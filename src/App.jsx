@@ -10,7 +10,7 @@ function App() {
   const token = localStorage.getItem('token');
 
   if (token && location.pathname !== '/logout') {
-    window.location.href = 'http://main.microfrontend.com';
+    window.location.href = process.env.REACT_APP_MAIN_URL;
   }
 
   return (
