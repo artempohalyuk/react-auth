@@ -28,6 +28,8 @@ const LoginForm = () => {
       }
 
       storeTokenInLocalStorage(result.payload.token);
+      console.log('domain', process.env.DOMAIN);
+      console.log('jwt', result.payload.token);
       document.cookie = `jwt=${result.payload.token}; domain=${process.env.DOMAIN}; path=/;`;
       window.location.href = process.env.REACT_APP_MAIN_URL;
     }
