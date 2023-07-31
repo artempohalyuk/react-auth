@@ -28,9 +28,9 @@ const LoginForm = () => {
       }
 
       storeTokenInLocalStorage(result.payload.token);
-      console.log('domain', process.env.DOMAIN);
+      console.log('domain', process.env.REACT_APP_DOMAIN);
       console.log('jwt', result.payload.token);
-      document.cookie = `jwt=${result.payload.token}; domain=${process.env.DOMAIN}; path=/;`;
+      document.cookie = `jwt=${result.payload.token}; domain=${process.env.REACT_APP_DOMAIN}; path=/;`;
       window.location.href = process.env.REACT_APP_MAIN_URL;
     }
     catch (err) {
