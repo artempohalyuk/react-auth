@@ -33,7 +33,7 @@ const RegistrationForm = () => {
       }
 
       storeTokenInLocalStorage(result.payload.token);
-      document.cookie = `jwt=${result.payload.token}; domain=.microfrontend.com; path=/;`;
+      document.cookie = `jwt=${result.payload.token}; domain=${process.env.DOMAIN}; path=/;`;
       window.location.href = process.env.REACT_APP_MAIN_URL;
     }
     catch (err) {
